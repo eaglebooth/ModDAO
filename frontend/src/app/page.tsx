@@ -371,8 +371,8 @@ export default function Home() {
             {!adminAddress ? (
               <button 
                 className="btn-primary" 
-                onClick={initializeContract} 
-                disabled={loading || !walletAccount || contractAddress === ZERO_ADDRESS}
+                onClick={!walletAccount ? handleConnectWallet : initializeContract} 
+                disabled={loading || (!!walletAccount && contractAddress === ZERO_ADDRESS)}
               >
                 {!walletAccount 
                   ? "Connect Wallet to Initialize" 
@@ -435,8 +435,8 @@ export default function Home() {
 
             <button 
               className="btn-primary" 
-              onClick={registerModerator} 
-              disabled={loading || !walletAccount || !adminAddress || contractAddress === ZERO_ADDRESS}
+              onClick={!walletAccount ? handleConnectWallet : registerModerator} 
+              disabled={loading || (!!walletAccount && (!adminAddress || contractAddress === ZERO_ADDRESS))}
             >
               {!walletAccount 
                 ? "Connect Wallet to Register" 
@@ -541,8 +541,8 @@ export default function Home() {
 
             <button 
               className="btn-primary" 
-              onClick={submitEvaluation}
-              disabled={loading || !walletAccount || !selectedModId || mods.filter(m => m.active).length === 0 || contractAddress === ZERO_ADDRESS}
+              onClick={!walletAccount ? handleConnectWallet : submitEvaluation}
+              disabled={loading || (!!walletAccount && (!selectedModId || mods.filter(m => m.active).length === 0 || contractAddress === ZERO_ADDRESS))}
             >
               {!walletAccount 
                 ? "Connect Wallet to Submit" 
