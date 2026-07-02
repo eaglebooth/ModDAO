@@ -40,6 +40,7 @@ interface Evaluation {
 }
 
 const DEFAULT_CONTRACT = "0xBbbc733490e7279A8113Dc5Cbdcc46b6C592b5D1";
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const SCENARIOS = [
   {
@@ -127,7 +128,7 @@ export default function Home() {
 
   // Reload Contract State
   async function loadContractState() {
-    if (!contractAddress || contractAddress === DEFAULT_CONTRACT) {
+    if (!contractAddress || contractAddress === ZERO_ADDRESS) {
       setStatusText("Contract address not configured.");
       return;
     }
@@ -206,7 +207,7 @@ export default function Home() {
       setWalletAccount(res.data as string);
       setStatusText("Wallet connected. Ready to read/write.");
       addLog(`Connected Wallet: ${res.data}`);
-      if (contractAddress && contractAddress !== DEFAULT_CONTRACT) {
+      if (contractAddress && contractAddress !== ZERO_ADDRESS) {
         loadContractState();
       }
     } else {
@@ -330,12 +331,12 @@ export default function Home() {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            {contractAddress === DEFAULT_CONTRACT && (
+            {contractAddress === ZERO_ADDRESS && (
               <span style={{ color: "var(--warning)", fontSize: "0.8rem", display: "flex", alignItems: "center", gap: "0.25rem" }}>
                 <AlertTriangle size={14} /> Please deploy the contract and configure its address
               </span>
             )}
-            <button className="btn-wallet" style={{ padding: "0.4rem 1rem", fontSize: "0.85rem" }} onClick={loadContractState} disabled={loading || contractAddress === DEFAULT_CONTRACT}>
+            <button className="btn-wallet" style={{ padding: "0.4rem 1rem", fontSize: "0.85rem" }} onClick={loadContractState} disabled={loading || contractAddress === ZERO_ADDRESS}>
               <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Sync State
             </button>
           </div>
@@ -371,11 +372,11 @@ export default function Home() {
               <button 
                 className="btn-primary" 
                 onClick={initializeContract} 
-                disabled={loading || !walletAccount || contractAddress === DEFAULT_CONTRACT}
+                disabled={loading || !walletAccount || contractAddress === ZERO_ADDRESS}
               >
                 {!walletAccount 
                   ? "Connect Wallet to Initialize" 
-                  : contractAddress === DEFAULT_CONTRACT 
+                  : contractAddress === ZERO_ADDRESS 
                     ? "Configure Contract Address First" 
                     : "Initialize Contract Admin"}
               </button>
@@ -435,11 +436,11 @@ export default function Home() {
             <button 
               className="btn-primary" 
               onClick={registerModerator} 
-              disabled={loading || !walletAccount || !adminAddress || contractAddress === DEFAULT_CONTRACT}
+              disabled={loading || !walletAccount || !adminAddress || contractAddress === ZERO_ADDRESS}
             >
               {!walletAccount 
                 ? "Connect Wallet to Register" 
-                : contractAddress === DEFAULT_CONTRACT 
+                : contractAddress === ZERO_ADDRESS 
                   ? "Configure Contract Address First" 
                   : !adminAddress 
                     ? "Initialize Contract Admin First" 
@@ -541,11 +542,11 @@ export default function Home() {
             <button 
               className="btn-primary" 
               onClick={submitEvaluation}
-              disabled={loading || !walletAccount || !selectedModId || mods.filter(m => m.active).length === 0 || contractAddress === DEFAULT_CONTRACT}
+              disabled={loading || !walletAccount || !selectedModId || mods.filter(m => m.active).length === 0 || contractAddress === ZERO_ADDRESS}
             >
               {!walletAccount 
                 ? "Connect Wallet to Submit" 
-                : contractAddress === DEFAULT_CONTRACT 
+                : contractAddress === ZERO_ADDRESS 
                   ? "Configure Contract Address First" 
                   : mods.filter(m => m.active).length === 0 
                     ? "Register a Moderator First" 
