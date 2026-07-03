@@ -162,16 +162,23 @@ class ModDAO(gl.Contract):
     def get_contract_state(self) -> str:
         # Serializes general state metadata
         admin_addr = ""
+        treasury_val = 0
         # Accessing self.admin_wallet[u256(0)] safely
         try:
             admin_addr = self.admin_wallet[u256(0)]
         except Exception:
             pass
 
+        # Accessing self.treasury_balance[u256(0)] safely
+        try:
+            treasury_val = int(self.treasury_balance[u256(0)])
+        except Exception:
+            pass
+
         return json.dumps(
             {
                 "admin": admin_addr,
-                "treasury": int(self.treasury_balance[u256(0)]),
+                "treasury": treasury_val,
                 "mod_count": int(self.mod_count),
                 "eval_count": int(self.eval_count),
             },
