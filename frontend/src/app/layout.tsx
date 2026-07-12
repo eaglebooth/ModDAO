@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Shell } from "@/components/Shell";
+import { WalletProvider } from "@/components/WalletProvider";
 
 export const metadata: Metadata = {
-  title: "ModDAO",
-  description: "Automated timesheet and payroll for community moderators powered by GenLayer AI Juries.",
+  title: "ModDAO | Moderation quality, settled on-chain",
+  description: "Comparative AI review and transparent moderator payout ledgers on GenLayer.",
 };
 
 export default function RootLayout({
@@ -13,12 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </head>
-      <body>{children}</body>
+      <body><WalletProvider><Shell>{children}</Shell></WalletProvider></body>
     </html>
   );
 }

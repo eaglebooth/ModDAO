@@ -1,50 +1,60 @@
-# ModDAO: Automated Community Moderator Payroll & AI Audit
+# ModDAO V2
 
-ModDAO is a decentralized autonomous platform that tracks, evaluates, and distributes stablecoin payouts for Discord and Telegram community moderators fairly based on support quality scores parsed by GenLayer AI Juries.
+ModDAO is a GenLayer-native moderation quality and payout-ledger protocol. It reads
+public support logs, asks independent validators to evaluate helpfulness, accuracy,
+and policy compliance, allows one moderator appeal, and finalizes a declared payout
+tier exactly once.
 
-## Problem Statement
+## Why GenLayer
 
-Traditional moderator payment structures are often flawed:
-* **Fixed Salary**: Fails to incentivize active and high-quality assistance, leading to lazy responses.
-* **Per-Message Salary**: Easily gamed by spamming meaningless, repetitive, or unhelpful replies.
-* **Qualitative Valuation**: Measuring real moderator helpfulness, patience, and competence is highly subjective and requires qualitative assessment.
+Moderator quality is subjective: message count cannot determine whether an answer was
+patient, correct, effective, and policy-compliant. ModDAO uses GenLayer web evidence,
+LLM reasoning, and comparative semantic consensus for the decision that selects a
+transparent payout tier.
 
-## GenLayer Solution
+## Contract lifecycle
 
-ModDAO leverages GenLayer Intelligent Contracts to solve this:
-1. **Support Log Scans**: The contract fetches public/private webhook URLs containing moderator chat histories.
-2. **AI Jury Audit**: Independent LLM Validator nodes evaluate the chat logs on:
-   - Politeness & attitude (0-30 points)
-   - Problem-solving efficacy & accuracy (0-50 points)
-   - Rule compliance & standard moderation (0-20 points)
-3. **Decentralized Payroll**: The AI nodes reach a subjective consensus (`strict_eq`) on the Quality Score (0-100). The contract automatically computes the payout (`base_pay * score // 100`) and transfers the rewards securely from the treasury.
+1. `initialize` records the calling wallet as admin once.
+2. `add_funds` adds admin-controlled treasury ledger units.
+3. `register_moderator` records a wallet and fixed STANDARD/EXCELLENT tiers.
+4. `request_evaluation` stores one public log per unique payroll cycle.
+5. `evaluate` proposes a decision using `prompt_comparative` consensus.
+6. `submit_appeal` lets the moderator add new evidence once.
+7. `evaluate_appeal` produces the final proposed tier.
+8. `finalize_evaluation` applies the treasury ledger update exactly once.
 
-## Directory Structure
+The current implementation is an accounting ledger and does not claim to transfer a
+stablecoin.
 
+## Frontend routes
+
+The Next.js application separates Setup, Treasury, Moderator Registry, Deactivation,
+Evaluation Request, Review, Appeal, Appeal Review, Finalization, lists, detail,
+How It Works, and Explorer proof into focused pages.
+
+## Local verification
+
+```bash
+python -m unittest discover -s tests -v
+cd frontend
+npm install
+npm run lint
+npm run build
+npm run dev
 ```
-├── contracts/
-│   └── ModDAO.py            # GenLayer Intelligent Contract
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── globals.css  # Premium Teal & Charcoal Dark Tech styles
-│   │   │   ├── page.tsx     # Dynamic React dashboard UI
-│   │   │   └── layout.tsx   
-│   │   └── lib/
-│   │       └── genlayer.ts  # Client wrapper connecting to studionet
-│   └── public/scenarios/    # Preloaded mock evaluation logs
-└── tests/
-    └── test_contract_static.py
+
+Open `http://localhost:3043`.
+
+## Deployment
+
+ModDAO V2 is deployed on GenLayer Studio (Studionet):
+
+`0x2F8C22569060Ae6102a8e8F4920D7F65B67b9179`
+
+Frontend configuration:
+
+```bash
+NEXT_PUBLIC_CONTRACT_ADDRESS=0x2F8C22569060Ae6102a8e8F4920D7F65B67b9179
+NEXT_PUBLIC_NETWORK=studionet
+NEXT_PUBLIC_CONTRACT_VERSION=2
 ```
-
-## Running Locally
-
-1. Launch GenLayer Studio.
-2. Compile and Deploy the contract `d:/Genlayer/ModDAO/contracts/ModDAO.py` on Studio to obtain the contract address.
-3. Boot the Next.js dev server on port `3043`:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-4. Open `http://localhost:3043`, connect your wallet, configure the contract address in the configuration bar, and run scenarios.

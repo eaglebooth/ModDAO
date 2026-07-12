@@ -66,7 +66,7 @@ export type ContractResult = {
 };
 
 function getContractAddress(contractAddress?: string) {
-  return contractAddress || process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0xBbbc733490e7279A8113Dc5Cbdcc46b6C592b5D1";
+  return contractAddress || process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
 }
 
 export async function connectWallet(): Promise<ContractResult> {
