@@ -5,7 +5,7 @@ import { WalletProvider } from "@/components/WalletProvider";
 
 export const metadata: Metadata = {
   title: "ModDAO | Moderation quality, settled on-chain",
-  description: "Comparative AI review and transparent moderator payout ledgers on GenLayer.",
+  description: "Comparative AI review and native GEN moderator payouts on GenLayer.",
 };
 
 export default function RootLayout({

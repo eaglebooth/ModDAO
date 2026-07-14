@@ -1,1 +1,6 @@
-import{WorkflowPage}from"@/components/WorkflowPage";export default async function P({params}:{params:Promise<{id:string}>}){const{id}=await params;return <WorkflowPage mode="finalize" id={id} kicker="Function 09 / finalize_evaluation" title="DEDUCT THE LEDGER ONCE." copy="Finalization checks treasury capacity, applies the selected tier, and blocks replay." steps={["Confirm no appeal is pending.","Compare proposed payout with treasury balance.","Finalize once and verify the Explorer receipt."]}/>}
+import { WorkflowPage } from "@/components/WorkflowPage";
+
+export default async function FinalizePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <WorkflowPage mode="finalize" id={id} kicker="Settlement / finalize_evaluation" title="TRANSFER THE RULING ONCE." copy="After the appeal window closes, finalization checks native GEN custody and transfers the selected tier to the registered moderator wallet. A zero-tier ruling records a no-payout settlement." steps={["Confirm the appeal window has closed or the appeal jury has ruled.", "Compare the proposed payout with available treasury.", "Finalize once and verify the recipient transfer in Explorer."]} />;
+}

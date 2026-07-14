@@ -1,28 +1,23 @@
-# ModDAO Contract Review
+# ModDAO V3 contract review
 
-Review date: 2026-07-12
+## Resolved security and product gaps
 
-## Critical findings
+- The constructor binds administration to the deployer; no first-caller takeover exists.
+- Every sender comparison uses normalized hexadecimal addresses.
+- Treasury funding is payable native GEN custody, not a user-entered ledger mutation.
+- Successful finalization transfers native GEN to the registered moderator wallet.
+- Each evaluation reserves its maximum payout before review, so admin withdrawal cannot make an active ruling insolvent.
+- Subjective reviews use comparative semantic consensus rather than byte equality.
+- Evidence is fetched with `gl.nondet.web.render` and truncated before prompting.
+- A 24-hour appeal window prevents immediate payout from bypassing the moderator.
+- `NEEDS_EVIDENCE` has a bounded replacement path instead of becoming a dead state.
+- Settlement records and aggregate funded/paid/withdrawn values are queryable on-chain.
 
-- `strict_eq` compares a JSON result containing free-form `comment`, so validators can
-  agree on performance but fail consensus because their wording differs.
-- `initialize` can be called repeatedly and accepts any admin address.
-- Treasury funding, moderator registration, and deactivation have no admin check.
-- Any caller can request an evaluation for any moderator.
-- Evaluation deducts treasury immediately, leaving no review or appeal stage.
-- Unreadable web evidence throws instead of producing a safe `NEEDS_EVIDENCE` state.
-- The contract records a payout ledger but does not transfer a stablecoin; product copy
-  must not claim that a token transfer happened.
-- The frontend, README, env files, and client fallback contain different contract
-  addresses, making deployment verification unreliable.
-- Production UI includes local scenario files and prefilled wallets instead of an
-  honest empty state.
+## Lifecycle
 
-## Required V2 lifecycle
-
-`initialize` -> `add_funds` -> `register_moderator` -> `request_evaluation` ->
-`evaluate` -> optional `submit_appeal` -> optional `evaluate_appeal` ->
+`fund_treasury` -> `register_moderator` -> `request_evaluation` -> `evaluate` ->
+optional `replace_evidence` or `submit_appeal` -> optional `evaluate_appeal` ->
 `finalize_evaluation`.
 
-Every write has an authorization guard and explicit status transition. Subjective
-reviews use `prompt_comparative`, and finalization mutates the treasury exactly once.
+ModDAO V3 must be deployed as a new contract because its storage and payment behavior
+are not compatible with the previous V2 address.

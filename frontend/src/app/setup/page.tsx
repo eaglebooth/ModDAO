@@ -1,1 +1,11 @@
-import{WorkflowPage}from"@/components/WorkflowPage";export default function P(){return <WorkflowPage mode="setup" kicker="Function 01 / initialize" title="CLAIM THE ADMIN ROLE ONCE." copy="The first successful caller becomes the immutable ModDAO V2 administrator." steps={["Use the wallet that will manage treasury and moderators.","Verify V2 is uninitialized.","Sign once; repeated initialization is rejected."]}/>}
+import { ContractBar } from "@/components/ContractBar";
+import { ConnectionVerifier } from "@/components/ConnectionVerifier";
+import { PageHead } from "@/components/PageHead";
+
+export default function SetupPage() {
+  return <>
+    <PageHead kicker="Deployment identity" title="VERIFY THE DEPLOYER-OWNED CONTRACT." copy="ModDAO V3 assigns the administrator in its constructor. There is no first-caller initialization transaction to front-run." />
+    <ContractBar />
+    <section className="band"><div className="wrap"><ConnectionVerifier /></div></section>
+  </>;
+}

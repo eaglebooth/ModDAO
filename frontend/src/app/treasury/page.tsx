@@ -1,1 +1,9 @@
-import{WorkflowPage}from"@/components/WorkflowPage";export default function P(){return <WorkflowPage mode="fund" kicker="Function 02 / add_funds" title="FUND THE PAYOUT LEDGER." copy="Admin-only accounting units cover finalized moderator payout tiers. This interface does not claim a stablecoin transfer." steps={["Connect the initialized admin wallet.","Choose the ledger amount to add.","Confirm the new balance through contract sync."]}/>}
+import Link from "next/link";
+import { WorkflowPage } from "@/components/WorkflowPage";
+
+export default function TreasuryPage() {
+  return <>
+    <WorkflowPage mode="fund" kicker="Treasury / payable deposit" title="FUND REAL MODERATOR PAYOUTS." copy="The admin deposits native GEN into contract custody. The attached wallet value, not a typed accounting number, becomes available treasury." steps={["Connect the contract deployer wallet.", "Enter the native GEN amount to custody.", "Confirm total funded and available treasury through contract sync."]} />
+    <section className="band"><div className="wrap"><Link className="secondary" href="/treasury/withdraw">WITHDRAW UNALLOCATED GEN</Link></div></section>
+  </>;
+}
